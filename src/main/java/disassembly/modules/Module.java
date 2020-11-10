@@ -124,15 +124,28 @@ public class Module extends WASMOpCode {
 
     @Override
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
-        Section[] sections = new Section[]{typeSection, importSection, functionSection, tableSection,
-        memorySection, globalSection, exportSection, startSection, elementSection, codeSection,
-        dataSection};
+//        Section[] sections = new Section[]{typeSection, importSection, functionSection, tableSection,
+//        memorySection, globalSection, exportSection, startSection, elementSection, codeSection,
+//        dataSection};
+//
+//        for (int i = 0; i < 11; i++) {
+//            assembleCustomSections(out, i);
+//            sections[i].assemble(out);
+//        }
+//        assembleCustomSections(out, 11);
 
-        for (int i = 0; i < 12; i++) {
+        magic.assemble(out);
+        version.assemble(out);
+
+        Section[] sections = new Section[]{typeSection, importSection, functionSection, globalSection, exportSection,
+                elementSection, codeSection,
+                dataSection};
+
+        for (int i = 0; i < 8; i++) {
             assembleCustomSections(out, i);
             sections[i].assemble(out);
         }
-        assembleCustomSections(out, 11);
+        assembleCustomSections(out, 8);
     }
 
     private void assembleCustomSections(OutputStream out, int location) throws IOException, InvalidOpCodeException {
