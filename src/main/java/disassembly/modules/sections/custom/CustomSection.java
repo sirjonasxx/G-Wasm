@@ -3,7 +3,6 @@ package disassembly.modules.sections.custom;
 import disassembly.InvalidOpCodeException;
 import disassembly.modules.sections.Section;
 import disassembly.values.WName;
-import disassembly.values.old.OldWUnsignedInt;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +14,7 @@ public abstract class CustomSection extends Section {
 
     private WName name;
 
-    public CustomSection(OldWUnsignedInt size, WName name) throws IOException, InvalidOpCodeException {
+    public CustomSection(long size, WName name) throws IOException, InvalidOpCodeException {
         super(CUSTOM_SECTION_ID, size);
         this.name = name;
     }

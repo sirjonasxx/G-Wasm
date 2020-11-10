@@ -12,8 +12,6 @@ public class WSignedLong {
 
     // everything with N > 32 && N <= 64
     public static long read(BufferedInputStream in, int N) throws InvalidOpCodeException, IOException {
-        if (N <= 64) throw new InvalidOpCodeException("Invalid integer size");
-
         long result = 0;
         long cur;
         int count = 0;
@@ -41,8 +39,6 @@ public class WSignedLong {
     }
 
     public static void write(long value, OutputStream out, int N) throws InvalidOpCodeException, IOException {
-        if (N <= 64) throw new InvalidOpCodeException("Invalid integer size");
-
         long remaining = value >> 7;
         boolean hasMore = true;
         long end = ((value & Long.MIN_VALUE) == 0) ? 0 : -1;

@@ -2,7 +2,6 @@ package disassembly.modules.sections.custom;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.values.WName;
-import disassembly.values.old.OldWUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,9 +12,9 @@ public class UnImplementedCustomSection extends CustomSection {
 
     private byte[] bytes;
 
-    public UnImplementedCustomSection(BufferedInputStream in, OldWUnsignedInt size, WName name) throws IOException, InvalidOpCodeException {
+    public UnImplementedCustomSection(BufferedInputStream in, long size, WName name) throws IOException, InvalidOpCodeException {
         super(size, name);
-        bytes = new byte[(int)size.getUnsignedInt() - name.getValue().getBytes(StandardCharsets.UTF_8).length];
+        bytes = new byte[(int)size - name.getValue().getBytes(StandardCharsets.UTF_8).length];
         in.read(bytes);
     }
 

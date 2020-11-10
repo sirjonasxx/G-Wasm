@@ -2,7 +2,7 @@ package disassembly.modules.indices;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -10,26 +10,26 @@ import java.io.OutputStream;
 
 public class LabelIdx extends WASMOpCode {
 
-    private OldWUnsignedInt l;
+    private long l;
 
     public LabelIdx(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        l = new OldWUnsignedInt(in, 32);
+        l = WUnsignedInt.read(in, 32);
     }
 
-    public LabelIdx(OldWUnsignedInt l) {
+    public LabelIdx(long l) {
         this.l = l;
     }
 
     @Override
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
-        l.assemble(out);
+        WUnsignedInt.write(l, out, 32);
     }
 
-    public OldWUnsignedInt getL() {
+    public long getL() {
         return l;
     }
 
-    public void setL(OldWUnsignedInt l) {
+    public void setL(long l) {
         this.l = l;
     }
 }

@@ -3,7 +3,7 @@ package disassembly.instructions.numeric;
 import disassembly.InvalidOpCodeException;
 import disassembly.instructions.Instr;
 import disassembly.instructions.InstrType;
-import disassembly.values.old.OldWSignedInt;
+import disassembly.values.WSignedLong;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -11,28 +11,28 @@ import java.io.OutputStream;
 
 public class NumericI64ConstInstr extends Instr {
 
-    private OldWSignedInt signedInt64;
+    private long constValue;
 
     public NumericI64ConstInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
         super(instrType);
-        signedInt64 = new OldWSignedInt(in, 64);
+        constValue = WSignedLong.read(in, 64);
     }
 
-    public NumericI64ConstInstr(InstrType instrType, OldWSignedInt signedInt64) throws IOException {
+    public NumericI64ConstInstr(InstrType instrType, long constValue) throws IOException {
         super(instrType);
-        this.signedInt64 = signedInt64;
+        this.constValue = constValue;
     }
 
     @Override
-    protected void assemble2(OutputStream out) throws IOException {
-        signedInt64.assemble(out);
+    protected void assemble2(OutputStream out) throws IOException, InvalidOpCodeException {
+        WSignedLong.write(constValue, out, 64);
     }
 
-    public OldWSignedInt getSignedInt64() {
-        return signedInt64;
+    public long getConstValue() {
+        return constValue;
     }
 
-    public void setSignedInt64(OldWSignedInt signedInt64) {
-        this.signedInt64 = signedInt64;
+    public void setConstValue(long constValue) {
+        this.constValue = constValue;
     }
 }

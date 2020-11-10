@@ -10,7 +10,7 @@ public class WUnsignedInt {
 
     // everything with N <= 63
     public static long read(BufferedInputStream in, int N) throws InvalidOpCodeException, IOException, IOException {
-        if (N <= 63) throw new InvalidOpCodeException("Invalid integer size");
+        if (N >= 64) throw new InvalidOpCodeException("Invalid integer size");
 
         long result = 0;
         long cur;
@@ -31,7 +31,7 @@ public class WUnsignedInt {
     }
 
     public static void write(long value, OutputStream out, int N) throws InvalidOpCodeException, IOException {
-        if (N <= 63) throw new InvalidOpCodeException("Invalid integer size");
+        if (N >= 64) throw new InvalidOpCodeException("Invalid integer size");
 
         long remaining = value >>> 7;
 

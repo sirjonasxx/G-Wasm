@@ -2,7 +2,7 @@ package disassembly.modules.sections.code;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,7 +14,7 @@ public class Code extends WASMOpCode {
     private Func code;
 
     public Code(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        OldWUnsignedInt sizeInBytes = new OldWUnsignedInt(in, 32); // don't use
+        long sizeInBytes = WUnsignedInt.read(in, 32);   // don't use
         code = new Func(in);
     }
 
@@ -27,7 +27,7 @@ public class Code extends WASMOpCode {
         ByteArrayOutputStream codeBuffer = new ByteArrayOutputStream();
         code.assemble(codeBuffer);
         byte[] codeInBytes = codeBuffer.toByteArray();
-        new OldWUnsignedInt(codeInBytes.length).assemble(out);
+        WUnsignedInt.write(codeInBytes.length, out, 32);
         out.write(codeInBytes);
     }
 

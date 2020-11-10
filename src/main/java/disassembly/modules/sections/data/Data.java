@@ -4,7 +4,7 @@ import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
 import disassembly.instructions.Expression;
 import disassembly.modules.indices.MemIdx;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -20,8 +20,8 @@ public class Data extends WASMOpCode {
     public Data(BufferedInputStream in) throws IOException, InvalidOpCodeException {
         dataMemId = new MemIdx(in);
         offset = new Expression(in);
-        OldWUnsignedInt length = new OldWUnsignedInt(in, 32);
-        data = new byte[(int)length.getUnsignedInt()];
+        long length = WUnsignedInt.read(in, 32);
+        data = new byte[(int)length];
         in.read(data);
     }
 
@@ -35,7 +35,7 @@ public class Data extends WASMOpCode {
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
         dataMemId.assemble(out);
         offset.assemble(out);
-        new OldWUnsignedInt(data.length).assemble(out);
+        WUnsignedInt.write(data.length, out, 32);
         out.write(data);
     }
 

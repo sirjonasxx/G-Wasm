@@ -2,7 +2,7 @@ package disassembly.conventions;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class Vector<B extends WASMOpCode> extends WASMOpCode {
     private List<B> elements;
 
     public Vector(BufferedInputStream in, Creator<B> creator) throws IOException, InvalidOpCodeException {
-        OldWUnsignedInt length = new OldWUnsignedInt(in, 32);
+        long length = WUnsignedInt.read(in, 32);
         elements = new ArrayList<>();
-        for (int i = 0; i < length.getUnsignedInt(); i++) {
+        for (int i = 0; i < length; i++) {
             elements.add(creator.create(in));
         }
     }
@@ -27,8 +27,7 @@ public class Vector<B extends WASMOpCode> extends WASMOpCode {
     }
 
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
-        OldWUnsignedInt length = new OldWUnsignedInt(elements.size());
-        length.assemble(out);
+        WUnsignedInt.write(elements.size(), out, 32);
         for (B b : elements) {
             b.assemble(out);
         }

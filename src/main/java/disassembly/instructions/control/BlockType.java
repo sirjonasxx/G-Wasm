@@ -3,7 +3,7 @@ package disassembly.instructions.control;
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
 import disassembly.types.ValType;
-import disassembly.values.old.OldWSignedInt;
+import disassembly.values.WSignedLong;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class BlockType extends WASMOpCode {
         }
         else {
             in.reset();
-            value = new OldWSignedInt(in, 33);
+            value = WSignedLong.read(in, 33);
         }
     }
 
@@ -41,8 +41,8 @@ public class BlockType extends WASMOpCode {
         else if (value instanceof ValType) {
             out.write(((ValType)value).val);
         }
-        else if (value instanceof OldWSignedInt) {
-            ((OldWSignedInt)value).assemble(out);
+        else if (value instanceof Long) {
+            WSignedLong.write((Long)value, out, 33);
         }
         else {
             throw new InvalidOpCodeException("Invalid block type");
@@ -66,6 +66,6 @@ public class BlockType extends WASMOpCode {
     }
 
     public boolean isSignedInteger() {
-        return value != null && value instanceof OldWSignedInt;
+        return value != null && value instanceof Long;
     }
 }

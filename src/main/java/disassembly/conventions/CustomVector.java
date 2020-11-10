@@ -1,7 +1,7 @@
 package disassembly.conventions;
 
 import disassembly.InvalidOpCodeException;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -15,9 +15,9 @@ public class CustomVector<B> {
     private Assembler<B> assembler;
 
     public CustomVector(BufferedInputStream in, Creator<B> creator, Assembler<B> assembler) throws IOException, InvalidOpCodeException {
-        OldWUnsignedInt length = new OldWUnsignedInt(in, 32);
+        long length = WUnsignedInt.read(in, 32);
         elements = new ArrayList<>();
-        for (int i = 0; i < length.getUnsignedInt(); i++) {
+        for (int i = 0; i < length; i++) {
             elements.add(creator.create(in));
         }
         this.assembler = assembler;
@@ -29,8 +29,7 @@ public class CustomVector<B> {
     }
 
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
-        OldWUnsignedInt length = new OldWUnsignedInt(elements.size());
-        length.assemble(out);
+        WUnsignedInt.write(elements.size(), out, 32);
         for (B b : elements) {
             assembler.assemble(b, out);
         }

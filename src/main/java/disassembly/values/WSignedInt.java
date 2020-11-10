@@ -11,7 +11,7 @@ public class WSignedInt {
 
     // everything with N <= 32
     public static int read(BufferedInputStream in, int N) throws InvalidOpCodeException, IOException {
-        if (N <= 32) throw new InvalidOpCodeException("Invalid integer size");
+        if (N > 32) throw new InvalidOpCodeException("Invalid integer size");
 
         int result = 0;
         int cur;
@@ -40,7 +40,7 @@ public class WSignedInt {
     }
 
     public static void write(int value, OutputStream out, int N) throws InvalidOpCodeException, IOException {
-        if (N <= 64) throw new InvalidOpCodeException("Invalid integer size");
+        if (N > 32) throw new InvalidOpCodeException("Invalid integer size");
 
         int remaining = value >> 7;
         boolean hasMore = true;

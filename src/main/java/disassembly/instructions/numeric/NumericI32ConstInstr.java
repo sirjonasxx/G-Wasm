@@ -3,7 +3,7 @@ package disassembly.instructions.numeric;
 import disassembly.InvalidOpCodeException;
 import disassembly.instructions.Instr;
 import disassembly.instructions.InstrType;
-import disassembly.values.old.OldWSignedInt;
+import disassembly.values.WSignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -11,28 +11,28 @@ import java.io.OutputStream;
 
 public class NumericI32ConstInstr extends Instr {
 
-    private OldWSignedInt signedInt32;
+    private int constValue;
 
     public NumericI32ConstInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
         super(instrType);
-        signedInt32 = new OldWSignedInt(in, 32);
+        constValue = WSignedInt.read(in, 32);
     }
 
-    public NumericI32ConstInstr(InstrType instrType, OldWSignedInt signedInt32) throws IOException {
+    public NumericI32ConstInstr(InstrType instrType, int constValue) throws IOException {
         super(instrType);
-        this.signedInt32 = signedInt32;
+        this.constValue = constValue;
     }
 
     @Override
-    protected void assemble2(OutputStream out) throws IOException {
-        signedInt32.assemble(out);
+    protected void assemble2(OutputStream out) throws IOException, InvalidOpCodeException {
+        WSignedInt.write(constValue, out, 32);
     }
 
-    public OldWSignedInt getSignedInt32() {
-        return signedInt32;
+    public int getConstValue() {
+        return constValue;
     }
 
-    public void setSignedInt32(OldWSignedInt signedInt32) {
-        this.signedInt32 = signedInt32;
+    public void setConstValue(int constValue) {
+        this.constValue = constValue;
     }
 }

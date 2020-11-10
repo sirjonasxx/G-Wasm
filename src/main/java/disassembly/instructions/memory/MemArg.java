@@ -2,7 +2,7 @@ package disassembly.instructions.memory;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -10,38 +10,38 @@ import java.io.OutputStream;
 
 public class MemArg extends WASMOpCode {
 
-    private OldWUnsignedInt align;
-    private OldWUnsignedInt offset;
+    private long align;
+    private long offset;
 
     public MemArg(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        align = new OldWUnsignedInt(in, 32);
-        offset = new OldWUnsignedInt(in, 32);
+        align = WUnsignedInt.read(in, 32);
+        offset = WUnsignedInt.read(in, 32);
     }
 
-    public MemArg(OldWUnsignedInt align, OldWUnsignedInt offset) {
+    public MemArg(long align, long offset) {
         this.align = align;
         this.offset = offset;
     }
 
     @Override
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
-        align.assemble(out);
-        offset.assemble(out);
+        WUnsignedInt.write(align, out, 32);
+        WUnsignedInt.write(offset, out, 32);
     }
 
-    public OldWUnsignedInt getAlign() {
+    public long getAlign() {
         return align;
     }
 
-    public void setAlign(OldWUnsignedInt align) {
+    public void setAlign(long align) {
         this.align = align;
     }
 
-    public OldWUnsignedInt getOffset() {
+    public long getOffset() {
         return offset;
     }
 
-    public void setOffset(OldWUnsignedInt offset) {
+    public void setOffset(long offset) {
         this.offset = offset;
     }
 }

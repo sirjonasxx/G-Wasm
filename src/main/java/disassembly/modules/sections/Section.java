@@ -2,7 +2,7 @@ package disassembly.modules.sections;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,20 +12,20 @@ import java.io.OutputStream;
 public abstract class Section extends WASMOpCode {
 
     private int sectionId;
-    private OldWUnsignedInt size;
+    private long size;
 
     public Section(BufferedInputStream in, int sectionId) throws IOException, InvalidOpCodeException {
         this.sectionId = sectionId;
-        size = new OldWUnsignedInt(in, 32);
+        size = WUnsignedInt.read(in, 32);
     }
 
-    public Section(int sectionId, OldWUnsignedInt size) {
+    public Section(int sectionId, long size) {
         this.sectionId = sectionId;
         this.size = size;
     }
 
     public Section(int sectionId) {
-        this(sectionId, null);
+        this(sectionId, -1);
     }
 
     @Override
@@ -35,7 +35,7 @@ public abstract class Section extends WASMOpCode {
         ByteArrayOutputStream fakeOutputStream = new ByteArrayOutputStream();
         assemble2(fakeOutputStream);
         byte[] asbytes = fakeOutputStream.toByteArray();
-        new OldWUnsignedInt(asbytes.length).assemble(out);
+        WUnsignedInt.write(asbytes.length, out, 32);
         out.write(asbytes);
     }
 
@@ -46,7 +46,7 @@ public abstract class Section extends WASMOpCode {
         return sectionId;
     }
 
-    public OldWUnsignedInt getSize() {
+    public long getSize() {
         return size;
     }
 }

@@ -2,7 +2,7 @@ package disassembly.types;
 
 import disassembly.InvalidOpCodeException;
 import disassembly.WASMOpCode;
-import disassembly.values.old.OldWUnsignedInt;
+import disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,12 +16,12 @@ public class Limits extends WASMOpCode {
     public Limits(BufferedInputStream in) throws IOException, InvalidOpCodeException {
         int flag = in.read();
         if (flag == 0x00) {
-            min = new OldWUnsignedInt(in, 32).getUnsignedInt();
+            min = WUnsignedInt.read(in, 32);
             max = -1;
         }
         else if (flag == 0x01) {
-            min = new OldWUnsignedInt(in, 32).getUnsignedInt();
-            max = new OldWUnsignedInt(in, 32).getUnsignedInt();
+            min = WUnsignedInt.read(in, 32);
+            max = WUnsignedInt.read(in, 32);
         }
         else throw new InvalidOpCodeException("Function types must be encoded with 0x00 or 0x01");
     }
@@ -33,9 +33,9 @@ public class Limits extends WASMOpCode {
 
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
         out.write(max == -1 ? 0x00 : 0x01);
-        new OldWUnsignedInt(min).assemble(out);
+        WUnsignedInt.write(min, out, 32);
         if (max != -1) {
-            new OldWUnsignedInt(max).assemble(out);
+            WUnsignedInt.write(max, out, 32);
         }
     }
 
