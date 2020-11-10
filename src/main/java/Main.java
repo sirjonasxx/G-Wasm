@@ -1,9 +1,5 @@
 import disassembly.InvalidOpCodeException;
-import disassembly.modules.Magic;
 import disassembly.modules.Module;
-import disassembly.modules.Version;
-import disassembly.modules.sections.SectionFactory;
-import disassembly.modules.sections.type.TypeSection;
 
 import java.io.*;
 

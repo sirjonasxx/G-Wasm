@@ -21,6 +21,10 @@ public class Version extends WASMOpCode {
         this.version = version;
     }
 
+    public Version() {
+        version = new byte[]{1, 0, 0, 0};
+    }
+
     @Override
     public void assemble(OutputStream out) throws IOException, InvalidOpCodeException {
         out.write(version);
