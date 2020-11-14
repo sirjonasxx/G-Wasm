@@ -3,6 +3,9 @@
 *.iml
 out/
 
+# self experiments
+src/main/java/misc/
+
 # maven
 bin/
 **/target/
