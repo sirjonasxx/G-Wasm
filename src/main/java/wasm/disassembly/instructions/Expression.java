@@ -2,6 +2,7 @@ package wasm.disassembly.instructions;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,11 +14,11 @@ public class Expression extends WASMOpCode {
 
     private List<Instr> instructions;
 
-    public Expression(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public Expression(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         instructions = new ArrayList<>();
         InstrType type;
         while ((type = InstrFactory.disassembleType(in)) != InstrType.END) {
-            instructions.add(InstrFactory.disassemble(in, type));
+            instructions.add(InstrFactory.disassemble(in, type, module));
         }
     }
 

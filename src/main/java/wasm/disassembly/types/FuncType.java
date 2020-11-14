@@ -2,6 +2,8 @@ package wasm.disassembly.types;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.sections.code.Func;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -12,11 +14,11 @@ public class FuncType extends WASMOpCode {
     private ResultType parameterType;
     private ResultType resultType;
 
-    public FuncType(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public FuncType(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         if (in.read() != 0x60) throw new InvalidOpCodeException("Function types must be encoded with 0x60");
 
-        parameterType = new ResultType(in);
-        resultType = new ResultType(in);
+        parameterType = new ResultType(in, module);
+        resultType = new ResultType(in, module);
     }
 
     public FuncType(ResultType parameterType, ResultType resultType) {
@@ -45,5 +47,17 @@ public class FuncType extends WASMOpCode {
 
     public void setResultType(ResultType resultType) {
         this.resultType = resultType;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof FuncType)) {
+            return false;
+        }
+
+        FuncType other = (FuncType) obj;
+
+        return parameterType.equals(other.parameterType) &&
+                resultType.equals(other.resultType);
     }
 }

@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.control;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 
 import java.io.BufferedInputStream;
@@ -13,13 +14,13 @@ public class CallInstr extends Instr {
 
     private FuncIdx funcIdx;
 
-    public CallInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public CallInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        funcIdx = new FuncIdx(in);
+        funcIdx = new FuncIdx(in, module);
     }
 
-    public CallInstr(InstrType instrType, FuncIdx funcIdx) throws IOException {
-        super(instrType);
+    public CallInstr(FuncIdx funcIdx) throws IOException {
+        super(InstrType.CALL);  // can only be call instr
         this.funcIdx = funcIdx;
     }
 

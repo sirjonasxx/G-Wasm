@@ -1,7 +1,9 @@
 package wasm.disassembly.modules.sections.imprt;
 
+import com.sun.org.apache.xpath.internal.functions.FuncId;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.sections.Section;
 
@@ -14,13 +16,24 @@ import java.util.List;
 public class ImportSection extends Section {
 
     public static final int IMPORT_SECTION_ID = 2;
+    private Module module;
+
+    private int totalFuncImports;
 
     private Vector<Import> imports;
 
 
-    public ImportSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public ImportSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, IMPORT_SECTION_ID);
-        imports = new Vector<>(in, Import::new);
+        this.module = module;
+        imports = new Vector<>(in, Import::new, module);
+
+        totalFuncImports = 0;
+        for (Import imprt : imports.getElements()) {
+            if (imprt.getImportDescription().getImportType() == 0) {
+                totalFuncImports++;
+            }
+        }
     }
 
     public ImportSection(List<Import> imports) {
@@ -41,11 +54,28 @@ public class ImportSection extends Section {
         this.imports = new Vector<>(imports);
     }
 
-    public void importFunctions(List<Import> functions) {
-        List<Import> newImports = new ArrayList<>(functions);
-        newImports.addAll(imports.getElements());
-        
-        setImports(newImports);
-        FuncIdx.OFFSET += functions.size();
+    public List<FuncIdx> importFunctions(List<Import> functions) throws InvalidOpCodeException {
+        for (Import imprt : functions) {
+            if (imprt.getImportDescription().getImportType() != 0) {
+                throw new InvalidOpCodeException("Tried to import non-function as function");
+            }
+        }
+
+        for (FuncIdx funcIdx : module.getAllFuncIdxs()) {
+            if (funcIdx.getX() >= totalFuncImports) {
+                funcIdx.setX(funcIdx.getX() + functions.size());
+            }
+        }
+        List<FuncIdx> newFuncIdxs = new ArrayList<>();
+        for (long i = totalFuncImports; i < totalFuncImports + functions.size(); i++) {
+            newFuncIdxs.add(new FuncIdx(i, module));
+        }
+        imports.getElements().addAll(functions);
+        totalFuncImports += functions.size();
+        return newFuncIdxs;
+    }
+
+    public int getTotalFuncImports() {
+        return totalFuncImports;
     }
 }

@@ -1,6 +1,7 @@
 package wasm.disassembly.modules.sections.custom;
 
 import wasm.disassembly.InvalidOpCodeException;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WName;
 
 import java.io.BufferedInputStream;
@@ -13,8 +14,8 @@ public class UnImplementedCustomSection extends CustomSection {
 
     private byte[] bytes;
 
-    public UnImplementedCustomSection(BufferedInputStream in, long size, String name) throws IOException, InvalidOpCodeException {
-        super(size, name);
+    public UnImplementedCustomSection(BufferedInputStream in, Module module, long size, String name) throws IOException, InvalidOpCodeException {
+        super(module, size, name);
 
         ByteArrayOutputStream nameOut = new ByteArrayOutputStream();
         WName.write(name, nameOut);

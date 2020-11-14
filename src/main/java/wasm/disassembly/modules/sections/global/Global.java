@@ -3,6 +3,7 @@ package wasm.disassembly.modules.sections.global;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
 import wasm.disassembly.instructions.Expression;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.types.GlobalType;
 
 import java.io.BufferedInputStream;
@@ -14,9 +15,9 @@ public class Global extends WASMOpCode {
     private GlobalType globalType;
     private Expression expression;
 
-    public Global(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        globalType = new GlobalType(in);
-        expression = new Expression(in);
+    public Global(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        globalType = new GlobalType(in, module);
+        expression = new Expression(in, module);
     }
 
     public Global(GlobalType globalType, Expression expression) {

@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.global;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -16,9 +17,9 @@ public class GlobalSection extends Section {
     private Vector<Global> globals;
 
 
-    public GlobalSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public GlobalSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, GLOBAL_SECTION_ID);
-        globals = new Vector<>(in, Global::new);
+        globals = new Vector<>(in, Global::new, module);
     }
 
     public GlobalSection(List<Global> globals) {

@@ -3,6 +3,7 @@ package wasm.disassembly.types;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
 import wasm.disassembly.conventions.CustomVector;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,11 +14,12 @@ public class ResultType extends WASMOpCode {
 
     private CustomVector<ValType> vector;
 
-    public ResultType(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public ResultType(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         vector = new CustomVector<>(
                 in,
-                in1 -> ValType.from_val(in1.read()),
-                (valType, out) -> out.write(valType.val)
+                (in1, m) -> ValType.from_val(in1.read()),
+                (valType, out) -> out.write(valType.val),
+                module
         );
     }
 
@@ -47,5 +49,15 @@ public class ResultType extends WASMOpCode {
 
     public void setVector(CustomVector<ValType> vector) {
         this.vector = vector;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ResultType)) {
+            return false;
+        }
+
+        ResultType other = (ResultType) obj;
+        return vector.getElements().equals(other.vector.getElements());
     }
 }

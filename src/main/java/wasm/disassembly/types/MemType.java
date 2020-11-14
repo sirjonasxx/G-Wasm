@@ -2,6 +2,7 @@ package wasm.disassembly.types;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -11,8 +12,8 @@ public class MemType extends WASMOpCode {
 
     private Limits limits;
 
-    public MemType(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        limits = new Limits(in);
+    public MemType(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        limits = new Limits(in, module);
     }
 
     public MemType(Limits limits) {

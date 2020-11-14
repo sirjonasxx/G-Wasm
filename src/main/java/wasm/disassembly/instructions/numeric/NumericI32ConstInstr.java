@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.numeric;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WSignedInt;
 
 import java.io.BufferedInputStream;
@@ -13,13 +14,13 @@ public class NumericI32ConstInstr extends Instr {
 
     private int constValue;
 
-    public NumericI32ConstInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public NumericI32ConstInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
         constValue = WSignedInt.read(in, 32);
     }
 
-    public NumericI32ConstInstr(InstrType instrType, int constValue) throws IOException {
-        super(instrType);
+    public NumericI32ConstInstr(int constValue) throws IOException {
+        super(InstrType.I32_CONST);
         this.constValue = constValue;
     }
 

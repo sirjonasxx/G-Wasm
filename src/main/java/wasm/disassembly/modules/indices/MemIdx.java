@@ -2,6 +2,7 @@ package wasm.disassembly.modules.indices;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -12,7 +13,7 @@ public class MemIdx extends WASMOpCode {
 
     private long x;
 
-    public MemIdx(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public MemIdx(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         x = WUnsignedInt.read(in, 32);
     }
 

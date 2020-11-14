@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.start;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 
 import java.io.BufferedInputStream;
@@ -12,8 +13,8 @@ public class Start extends WASMOpCode {
 
     private FuncIdx funcIdx;
 
-    public Start(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        funcIdx = new FuncIdx(in);
+    public Start(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        funcIdx = new FuncIdx(in, module);
     }
 
     public Start(FuncIdx funcIdx) {

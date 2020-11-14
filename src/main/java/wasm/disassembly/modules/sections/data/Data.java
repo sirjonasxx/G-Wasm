@@ -3,6 +3,7 @@ package wasm.disassembly.modules.sections.data;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
 import wasm.disassembly.instructions.Expression;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.MemIdx;
 import wasm.disassembly.values.WUnsignedInt;
 
@@ -17,9 +18,9 @@ public class Data extends WASMOpCode {
     private byte[] data;
 
 
-    public Data(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        dataMemId = new MemIdx(in);
-        offset = new Expression(in);
+    public Data(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        dataMemId = new MemIdx(in, module);
+        offset = new Expression(in, module);
         long length = WUnsignedInt.read(in, 32);
         data = new byte[(int)length];
         in.read(data);

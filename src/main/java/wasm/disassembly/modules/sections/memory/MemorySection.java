@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.memory;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -16,9 +17,9 @@ public class MemorySection extends Section {
     private Vector<Mem> memories;
 
 
-    public MemorySection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public MemorySection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, MEMORY_SECTION_ID);
-        memories = new Vector<>(in, Mem::new);
+        memories = new Vector<>(in, Mem::new, module);
     }
 
     public MemorySection(List<Mem> memories) {

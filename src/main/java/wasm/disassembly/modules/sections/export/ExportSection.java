@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.export;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -15,9 +16,9 @@ public class ExportSection extends Section {
 
     private Vector<Export> exports;
 
-    public ExportSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public ExportSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, EXPORT_SECTION_ID);
-        exports = new Vector<>(in, Export::new);
+        exports = new Vector<>(in, Export::new, module);
     }
 
     public ExportSection(List<Export> exports) {

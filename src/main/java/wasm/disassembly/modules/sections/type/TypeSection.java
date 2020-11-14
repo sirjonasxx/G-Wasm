@@ -2,6 +2,8 @@ package wasm.disassembly.modules.sections.type;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.indices.TypeIdx;
 import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.types.FuncType;
 
@@ -17,9 +19,9 @@ public class TypeSection extends Section {
     private Vector<FuncType> functionTypes;
 
 
-    public TypeSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public TypeSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, TYPE_SECTION_ID);
-        functionTypes = new Vector<>(in, FuncType::new);
+        functionTypes = new Vector<>(in, FuncType::new, module);
     }
 
     public TypeSection(List<FuncType> functionTypes) {
@@ -38,5 +40,17 @@ public class TypeSection extends Section {
 
     public void setFunctionTypes(List<FuncType> functionTypes) {
         this.functionTypes = new Vector<>(functionTypes);
+    }
+
+    public TypeIdx getTypeIdxForFuncType(FuncType newFuncType) {
+        for (int i = 0; i < getFunctionTypes().size(); i++) {
+            FuncType funcType = getFunctionTypes().get(i);
+            if (funcType.equals(newFuncType)) {
+                return new TypeIdx(i);
+            }
+        }
+
+        getFunctionTypes().add(newFuncType);
+        return new TypeIdx(getFunctionTypes().size() - 1);
     }
 }

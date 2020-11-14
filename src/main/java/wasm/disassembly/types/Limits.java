@@ -2,6 +2,7 @@ package wasm.disassembly.types;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -13,7 +14,7 @@ public class Limits extends WASMOpCode {
     private long min;
     private long max;
 
-    public Limits(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public Limits(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         int flag = in.read();
         if (flag == 0x00) {
             min = WUnsignedInt.read(in, 32);

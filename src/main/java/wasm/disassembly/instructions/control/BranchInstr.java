@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.control;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.LabelIdx;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class BranchInstr extends Instr {
 
     private LabelIdx labelIdx;
 
-    public BranchInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public BranchInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        labelIdx = new LabelIdx(in);
+        labelIdx = new LabelIdx(in, module);
     }
 
     public BranchInstr(InstrType instrType, LabelIdx labelIdx) throws IOException {

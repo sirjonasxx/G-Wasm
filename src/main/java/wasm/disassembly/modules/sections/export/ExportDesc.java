@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.export;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.indices.GlobalIdx;
 import wasm.disassembly.modules.indices.MemIdx;
@@ -17,16 +18,16 @@ public class ExportDesc extends WASMOpCode {
     private int exportType;
 
 
-    public ExportDesc(BufferedInputStream in) throws InvalidOpCodeException, IOException {
+    public ExportDesc(BufferedInputStream in, Module module) throws InvalidOpCodeException, IOException {
         exportType = in.read();
         if (exportType < 0x00 || exportType > 0x03) {
             throw new InvalidOpCodeException("invalid importdesc type");
         }
 
-        exportValue = exportType == 0x00 ? new FuncIdx(in) :
-                (exportType == 0x01 ? new TableIdx(in) :
-                        (exportType == 0x02 ? new MemIdx(in) :
-                                new GlobalIdx(in)));
+        exportValue = exportType == 0x00 ? new FuncIdx(in, module) :
+                (exportType == 0x01 ? new TableIdx(in, module) :
+                        (exportType == 0x02 ? new MemIdx(in, module) :
+                                new GlobalIdx(in, module)));
     }
 
     public ExportDesc(WASMOpCode exportValue, int exportType) {

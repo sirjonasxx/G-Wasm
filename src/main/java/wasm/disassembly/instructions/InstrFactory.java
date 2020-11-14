@@ -8,6 +8,7 @@ import wasm.disassembly.instructions.misc.SingleByteInstr;
 import wasm.disassembly.instructions.numeric.*;
 import wasm.disassembly.instructions.variable.GlobalVariableInstr;
 import wasm.disassembly.instructions.variable.LocalVariableInstr;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class InstrFactory {
         map.put(InstrType.IXX_TRUNC_SAT_FXX_SU, TruncSatInstr::new);
     }
 
-    public static Instr disassemble(BufferedInputStream in, InstrType instrType) throws InvalidOpCodeException, IOException {
+    public static Instr disassemble(BufferedInputStream in, InstrType instrType, Module module) throws InvalidOpCodeException, IOException {
         if (instrType == InstrType.END || instrType == InstrType.ELSE) {
             throw new InvalidOpCodeException("Instruction invalid as a standalone instruction");
         }
@@ -79,7 +80,7 @@ public class InstrFactory {
             throw new InvalidOpCodeException("Invalid instruction prefix");
         }
 
-        return map.get(instrType).get(in, instrType);
+        return map.get(instrType).get(in, instrType, module);
     }
 
 }

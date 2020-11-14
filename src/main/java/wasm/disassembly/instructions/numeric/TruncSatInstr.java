@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.numeric;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -13,7 +14,7 @@ public class TruncSatInstr extends Instr {
 
     private long type;
 
-    public TruncSatInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public TruncSatInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
         type = WUnsignedInt.read(in, 32);
         if (type < 0 || type > 7) {

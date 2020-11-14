@@ -4,6 +4,7 @@ import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrFactory;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -16,15 +17,15 @@ public class BlockInstr extends Instr {
     private List<Instr> blockInstructions;
     private BlockType blockType;
 
-    public BlockInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public BlockInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
 
-        blockType = new BlockType(in);
+        blockType = new BlockType(in, module);
 
         blockInstructions = new ArrayList<>();
         InstrType type;
         while ((type = InstrFactory.disassembleType(in)) != InstrType.END) {
-            blockInstructions.add(InstrFactory.disassemble(in, type));
+            blockInstructions.add(InstrFactory.disassemble(in, type, module));
         }
     }
 

@@ -1,9 +1,11 @@
 package wasm.disassembly.instructions.control;
 
 import wasm.disassembly.InvalidOpCodeException;
+import wasm.disassembly.conventions.Creator;
 import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.LabelIdx;
 
 import java.io.BufferedInputStream;
@@ -15,10 +17,10 @@ public class BranchTableInstr extends Instr {
     private Vector<LabelIdx> table;
     private LabelIdx labelIdx;
 
-    public BranchTableInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public BranchTableInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        table = new Vector<>(in, LabelIdx::new);
-        labelIdx = new LabelIdx(in);
+        table = new Vector<>(in, LabelIdx::new, module);
+        labelIdx = new LabelIdx(in, module);
     }
 
     public BranchTableInstr(InstrType instrType, Vector<LabelIdx> table, LabelIdx labelIdx) throws IOException {

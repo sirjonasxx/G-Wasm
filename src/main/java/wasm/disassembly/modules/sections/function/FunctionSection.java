@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.function;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.TypeIdx;
 import wasm.disassembly.modules.sections.Section;
 
@@ -17,9 +18,9 @@ public class FunctionSection extends Section {
     private Vector<TypeIdx> typeIdxVector;
 
 
-    public FunctionSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public FunctionSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, FUNCTION_SECTION_ID);
-        typeIdxVector = new Vector<>(in, TypeIdx::new);
+        typeIdxVector = new Vector<>(in, TypeIdx::new, module);
     }
 
     public FunctionSection(List<TypeIdx> typeIdxList) {

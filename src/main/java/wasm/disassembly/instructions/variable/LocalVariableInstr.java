@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.variable;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.LocalIdx;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class LocalVariableInstr extends Instr {
 
     private LocalIdx localIdx;
 
-    public LocalVariableInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public LocalVariableInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        localIdx = new LocalIdx(in);
+        localIdx = new LocalIdx(in, module);
     }
 
     public LocalVariableInstr(InstrType instrType, LocalIdx localIdx) throws IOException {

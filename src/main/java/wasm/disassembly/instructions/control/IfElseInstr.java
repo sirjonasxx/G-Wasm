@@ -4,6 +4,7 @@ import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrFactory;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -19,10 +20,10 @@ public class IfElseInstr extends Instr {
     private BlockType blockType;
 
 
-    public IfElseInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public IfElseInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
 
-        blockType = new BlockType(in);
+        blockType = new BlockType(in, module);
         ifInstructions = new ArrayList<>();
         elseInstructions = null;
         List<Instr> currentBlock = ifInstructions;
@@ -34,7 +35,7 @@ public class IfElseInstr extends Instr {
                 currentBlock = elseInstructions;
             }
             else {
-                currentBlock.add(InstrFactory.disassemble(in, type));
+                currentBlock.add(InstrFactory.disassemble(in, type, module));
             }
         }
     }

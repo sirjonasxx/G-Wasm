@@ -2,6 +2,7 @@ package wasm.disassembly.instructions.control;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.types.ValType;
 import wasm.disassembly.values.WSignedLong;
 
@@ -13,7 +14,7 @@ public class BlockType extends WASMOpCode {
 
     private Object value;
 
-    public BlockType(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public BlockType(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         in.mark(1);
         int first = in.read();
 

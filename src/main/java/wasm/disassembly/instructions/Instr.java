@@ -2,6 +2,7 @@ package wasm.disassembly.instructions;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 
 import java.io.IOException;
 import java.io.OutputStream;

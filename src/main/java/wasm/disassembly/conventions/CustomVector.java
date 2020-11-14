@@ -1,6 +1,8 @@
 package wasm.disassembly.conventions;
 
 import wasm.disassembly.InvalidOpCodeException;
+import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -9,16 +11,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomVector<B> {
+public class CustomVector<B> extends WASMOpCode {
 
     private List<B> elements;
     private Assembler<B> assembler;
 
-    public CustomVector(BufferedInputStream in, Creator<B> creator, Assembler<B> assembler) throws IOException, InvalidOpCodeException {
+    public CustomVector(BufferedInputStream in, Creator<B> creator, Assembler<B> assembler, Module module) throws IOException, InvalidOpCodeException {
         long length = WUnsignedInt.read(in, 32);
         elements = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            elements.add(creator.create(in));
+            elements.add(creator.create(in, module));
         }
         this.assembler = assembler;
     }

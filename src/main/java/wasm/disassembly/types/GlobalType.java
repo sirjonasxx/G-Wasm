@@ -2,6 +2,7 @@ package wasm.disassembly.types;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class GlobalType extends WASMOpCode {
     private ValType valType;
     private Mutability mutability;
 
-    public GlobalType(BufferedInputStream in) throws IOException {
+    public GlobalType(BufferedInputStream in, Module module) throws IOException {
         valType = ValType.from_val(in.read());
         mutability = Mutability.from_val(in.read());
     }

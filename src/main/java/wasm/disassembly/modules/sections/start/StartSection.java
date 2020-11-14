@@ -1,6 +1,7 @@
 package wasm.disassembly.modules.sections.start;
 
 import wasm.disassembly.InvalidOpCodeException;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class StartSection extends Section {
 
     private Start start;
 
-    public StartSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public StartSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, START_SECTION_ID);
-        start = new Start(in);
+        start = new Start(in, module);
     }
 
     public StartSection(Start start) {

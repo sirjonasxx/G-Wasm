@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.code;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.types.ValType;
 import wasm.disassembly.values.WUnsignedInt;
 
@@ -14,12 +15,12 @@ public class Locals extends WASMOpCode {
     private long amount;
     private ValType valType;
 
-    public Locals(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public Locals(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         amount = WUnsignedInt.read(in, 32);
         valType = ValType.from_val(in.read());
     }
 
-    public Locals(long amount, ValType valType) throws InvalidOpCodeException {
+    public Locals(long amount, ValType valType) {
         this.amount = amount;
         this.valType = valType;
     }

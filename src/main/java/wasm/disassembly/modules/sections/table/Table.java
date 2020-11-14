@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.table;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.types.TableType;
 
 import java.io.BufferedInputStream;
@@ -12,8 +13,8 @@ public class Table extends WASMOpCode {
 
     private TableType tableType;
 
-    public Table(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        tableType = new TableType(in);
+    public Table(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        tableType = new TableType(in, module);
     }
 
     public Table(TableType tableType) {

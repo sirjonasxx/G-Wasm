@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.export;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WName;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class Export extends WASMOpCode {
     private String name;
     private ExportDesc exportDesc;
 
-    public Export(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public Export(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         name = WName.read(in);
-        exportDesc = new ExportDesc(in);
+        exportDesc = new ExportDesc(in, module);
     }
 
     public Export(String name, ExportDesc exportDesc) {

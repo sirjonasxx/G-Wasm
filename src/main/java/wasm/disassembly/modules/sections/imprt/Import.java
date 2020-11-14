@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.imprt;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WName;
 
 import java.io.BufferedInputStream;
@@ -14,10 +15,10 @@ public class Import extends WASMOpCode {
     private String name;
     private ImportDesc importDescription;
 
-    public Import(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        module = WName.read(in);
+    public Import(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        this.module = WName.read(in);
         name = WName.read(in);
-        importDescription = new ImportDesc(in);
+        importDescription = new ImportDesc(in, module);
     }
 
     public Import(String module, String name, ImportDesc importDescription) {

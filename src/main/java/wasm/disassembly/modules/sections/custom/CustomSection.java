@@ -1,6 +1,7 @@
 package wasm.disassembly.modules.sections.custom;
 
 import wasm.disassembly.InvalidOpCodeException;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.values.WName;
 
@@ -14,7 +15,7 @@ public abstract class CustomSection extends Section {
 
     private String name;
 
-    public CustomSection(long size, String name) throws IOException, InvalidOpCodeException {
+    public CustomSection(Module module, long size, String name) throws IOException, InvalidOpCodeException {
         super(CUSTOM_SECTION_ID, size);
         this.name = name;
     }

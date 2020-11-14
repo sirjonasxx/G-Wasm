@@ -2,6 +2,7 @@ package wasm.disassembly.modules;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.modules.sections.code.CodeSection;
 import wasm.disassembly.modules.sections.custom.CustomSection;
@@ -17,9 +18,7 @@ import wasm.disassembly.modules.sections.start.StartSection;
 import wasm.disassembly.modules.sections.table.TableSection;
 import wasm.disassembly.modules.sections.type.TypeSection;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +40,7 @@ public class Module extends WASMOpCode {
     private DataSection dataSection;
 
     private List<List<CustomSection>> customSectionsList;
+    private List<FuncIdx> allFuncIdxs = new ArrayList<>();
 
     public Module(BufferedInputStream in) throws IOException, InvalidOpCodeException {
         customSectionsList = new ArrayList<>();
@@ -49,29 +49,34 @@ public class Module extends WASMOpCode {
         version = new Version(in);
 
         disassembleCustomSections(in);
-        typeSection = isNextSection(in, 1) ? new TypeSection(in) : null;
+        typeSection = isNextSection(in, 1) ? new TypeSection(in, this) : null;
         disassembleCustomSections(in);
-        importSection = isNextSection(in, 2) ? new ImportSection(in) : null;
+        importSection = isNextSection(in, 2) ? new ImportSection(in, this) : null;
         disassembleCustomSections(in);
-        functionSection = isNextSection(in, 3) ? new FunctionSection(in) : null;
+        functionSection = isNextSection(in, 3) ? new FunctionSection(in, this) : null;
         disassembleCustomSections(in);
-        tableSection = isNextSection(in, 4) ? new TableSection(in) : null;
+        tableSection = isNextSection(in, 4) ? new TableSection(in, this) : null;
         disassembleCustomSections(in);
-        memorySection = isNextSection(in, 5) ? new MemorySection(in) : null;
+        memorySection = isNextSection(in, 5) ? new MemorySection(in, this) : null;
         disassembleCustomSections(in);
-        globalSection = isNextSection(in , 6) ? new GlobalSection(in) : null;
+        globalSection = isNextSection(in , 6) ? new GlobalSection(in, this) : null;
         disassembleCustomSections(in);
-        exportSection = isNextSection(in, 7) ? new ExportSection(in) : null;
+        exportSection = isNextSection(in, 7) ? new ExportSection(in, this) : null;
         disassembleCustomSections(in);
-        startSection = isNextSection(in, 8) ? new StartSection(in) : null;
+        startSection = isNextSection(in, 8) ? new StartSection(in, this) : null;
         disassembleCustomSections(in);
-        elementSection = isNextSection(in, 9) ? new ElementSection(in) : null;
+        elementSection = isNextSection(in, 9) ? new ElementSection(in, this) : null;
         disassembleCustomSections(in);
-        codeSection = isNextSection(in, 10) ? new CodeSection(in) : null;
+        codeSection = isNextSection(in, 10) ? new CodeSection(in, this) : null;
         disassembleCustomSections(in);
-        dataSection = isNextSection(in, 11) ? new DataSection(in) : null;
+        dataSection = isNextSection(in, 11) ? new DataSection(in, this) : null;
         disassembleCustomSections(in);
 
+        in.close();
+    }
+
+    public Module(String fileName) throws IOException, InvalidOpCodeException {
+        this(new BufferedInputStream(new FileInputStream(new File(fileName))));
     }
 
     public Module(Magic magic, Version version, TypeSection typeSection, ImportSection importSection, FunctionSection functionSection, TableSection tableSection, MemorySection memorySection, GlobalSection globalSection, ExportSection exportSection, StartSection startSection, ElementSection elementSection, CodeSection codeSection, DataSection dataSection) {
@@ -94,7 +99,6 @@ public class Module extends WASMOpCode {
             customSectionsList.add(new ArrayList<>());
         }
     }
-
     public Module(TypeSection typeSection, ImportSection importSection, FunctionSection functionSection, TableSection tableSection, MemorySection memorySection, GlobalSection globalSection, ExportSection exportSection, StartSection startSection, ElementSection elementSection, CodeSection codeSection, DataSection dataSection, List<List<CustomSection>> customSectionsList) {
         this(new Magic(), new Version(), typeSection, importSection, functionSection, tableSection, memorySection,
                 globalSection, exportSection, startSection, elementSection, codeSection, dataSection);
@@ -104,7 +108,7 @@ public class Module extends WASMOpCode {
         List<CustomSection> customSections = new ArrayList<>();
 
         while (isNextSection(in, 0)) {
-            customSections.add(CustomSectionFactory.get(in));
+            customSections.add(CustomSectionFactory.get(in, this));
         }
 
         in.reset();
@@ -144,6 +148,11 @@ public class Module extends WASMOpCode {
         }
     }
 
+    public void assembleToFile(String fileName) throws IOException, InvalidOpCodeException {
+        FileOutputStream habAssembled = new FileOutputStream(fileName);
+        assemble(habAssembled);
+        habAssembled.close();
+    }
 
     public Magic getMagic() {
         return magic;
@@ -255,5 +264,9 @@ public class Module extends WASMOpCode {
 
     public void setCustomSectionsList(List<List<CustomSection>> customSectionsList) {
         this.customSectionsList = customSectionsList;
+    }
+
+    public List<FuncIdx> getAllFuncIdxs() {
+        return allFuncIdxs;
     }
 }

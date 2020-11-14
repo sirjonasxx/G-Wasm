@@ -4,6 +4,7 @@ import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
 import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.instructions.Expression;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.indices.TableIdx;
 
@@ -17,10 +18,10 @@ public class Elem extends WASMOpCode {
     private Expression offset;
     private Vector<FuncIdx> init;
 
-    public Elem(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        tableIdx = new TableIdx(in);
-        offset = new Expression(in);
-        init = new Vector<>(in, FuncIdx::new);
+    public Elem(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        tableIdx = new TableIdx(in, module);
+        offset = new Expression(in, module);
+        init = new Vector<>(in, FuncIdx::new, module);
     }
 
     public Elem(TableIdx tableIdx, Expression offset, Vector<FuncIdx> init) {

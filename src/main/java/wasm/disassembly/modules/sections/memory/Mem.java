@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.memory;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.types.MemType;
 
 import java.io.BufferedInputStream;
@@ -12,8 +13,8 @@ public class Mem extends WASMOpCode {
 
     private MemType memType;
 
-    public Mem(BufferedInputStream in) throws IOException, InvalidOpCodeException {
-        memType = new MemType(in);
+    public Mem(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
+        memType = new MemType(in, module);
     }
 
     public Mem(MemType memType) {

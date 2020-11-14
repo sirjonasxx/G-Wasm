@@ -2,6 +2,7 @@ package wasm.disassembly.conventions;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -14,11 +15,11 @@ public class Vector<B extends WASMOpCode> extends WASMOpCode {
 
     private List<B> elements;
 
-    public Vector(BufferedInputStream in, Creator<B> creator) throws IOException, InvalidOpCodeException {
+    public Vector(BufferedInputStream in, Creator<B> creator, Module module) throws IOException, InvalidOpCodeException {
         long length = WUnsignedInt.read(in, 32);
         elements = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            elements.add(creator.create(in));
+            elements.add(creator.create(in, module));
         }
     }
 

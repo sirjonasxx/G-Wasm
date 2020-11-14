@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.memory;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -12,9 +13,9 @@ public class MemInstr extends Instr {
 
     private MemArg memArg;
 
-    public MemInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public MemInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        memArg = new MemArg(in);
+        memArg = new MemArg(in, module);
     }
 
     public MemInstr(InstrType instrType, MemArg memArg) throws IOException {

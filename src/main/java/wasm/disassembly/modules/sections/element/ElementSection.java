@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.element;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -15,9 +16,9 @@ public class ElementSection extends Section {
 
     private Vector<Elem> elementSegments;
 
-    public ElementSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public ElementSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, ELEMENT_SECTION_ID);
-        elementSegments = new Vector<>(in, Elem::new);
+        elementSegments = new Vector<>(in, Elem::new, module);
     }
 
     public ElementSection(List<Elem> elementSegments) {

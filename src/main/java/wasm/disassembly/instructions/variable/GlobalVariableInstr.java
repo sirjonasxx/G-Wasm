@@ -3,6 +3,7 @@ package wasm.disassembly.instructions.variable;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.GlobalIdx;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class GlobalVariableInstr extends Instr {
 
     private GlobalIdx globalIdx;
 
-    public GlobalVariableInstr(BufferedInputStream in, InstrType instrType) throws IOException, InvalidOpCodeException {
+    public GlobalVariableInstr(BufferedInputStream in, InstrType instrType, Module module) throws IOException, InvalidOpCodeException {
         super(instrType);
-        globalIdx = new GlobalIdx(in);
+        globalIdx = new GlobalIdx(in, module);
     }
 
     public GlobalVariableInstr(InstrType instrType, GlobalIdx globalIdx) throws IOException {

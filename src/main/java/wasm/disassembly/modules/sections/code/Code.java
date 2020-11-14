@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.code;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -13,9 +14,9 @@ public class Code extends WASMOpCode {
 
     private Func code;
 
-    public Code(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public Code(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         long sizeInBytes = WUnsignedInt.read(in, 32);   // don't use
-        code = new Func(in);
+        code = new Func(in, module);
     }
 
     public Code(Func code) {

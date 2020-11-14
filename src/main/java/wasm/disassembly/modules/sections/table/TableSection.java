@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.table;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -16,9 +17,9 @@ public class TableSection extends Section {
     private Vector<Table> tables;
 
 
-    public TableSection(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    public TableSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         super(in, TABLE_SECTION_ID);
-        tables = new Vector<>(in, Table::new);
+        tables = new Vector<>(in, Table::new, module);
     }
 
     public TableSection(List<Table> tables) {
