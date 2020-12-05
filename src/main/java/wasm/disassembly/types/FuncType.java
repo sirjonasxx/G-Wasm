@@ -60,4 +60,9 @@ public class FuncType extends WASMOpCode {
         return parameterType.equals(other.parameterType) &&
                 resultType.equals(other.resultType);
     }
+
+    @Override
+    public String toString() {
+        return parameterType + " -> " + resultType;
+    }
 }

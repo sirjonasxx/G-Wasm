@@ -46,4 +46,12 @@ public class Locals extends WASMOpCode {
     public void setValType(ValType valType) {
         this.valType = valType;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Locals)) return false;
+        Locals other = (Locals) obj;
+        return amount == other.amount && valType.val == other.valType.val;
+    }
 }

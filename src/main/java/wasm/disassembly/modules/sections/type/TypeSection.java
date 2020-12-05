@@ -38,6 +38,10 @@ public class TypeSection extends Section {
         return functionTypes.getElements();
     }
 
+    public FuncType getByTypeIdx(TypeIdx typeIdx) {
+        return functionTypes.getElements().get((int)(typeIdx.getX()));
+    }
+
     public void setFunctionTypes(List<FuncType> functionTypes) {
         this.functionTypes = new Vector<>(functionTypes);
     }

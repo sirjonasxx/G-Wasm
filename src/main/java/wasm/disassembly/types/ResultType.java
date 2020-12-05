@@ -9,6 +9,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ResultType extends WASMOpCode {
 
@@ -59,5 +61,10 @@ public class ResultType extends WASMOpCode {
 
         ResultType other = (ResultType) obj;
         return vector.getElements().equals(other.vector.getElements());
+    }
+
+    @Override
+    public String toString() {
+         return "(" + vector.getElements().stream().map(Enum::name).collect(Collectors.joining(" ")) + ")";
     }
 }
