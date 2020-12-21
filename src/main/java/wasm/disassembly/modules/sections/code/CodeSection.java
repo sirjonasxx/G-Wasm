@@ -3,6 +3,7 @@ package wasm.disassembly.modules.sections.code;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.sections.Section;
 
 import java.io.BufferedInputStream;
@@ -32,6 +33,13 @@ public class CodeSection extends Section {
         codesEntries.assemble(out);
     }
 
+    public Code getCodeByIdx(FuncIdx funcIdx) {
+        return codesEntries.getElements().get((int)(funcIdx.getX()) - module.getImportSection().getTotalFuncImports());
+    }
+
+    public Func getByIdx(FuncIdx funcIdx) {
+        return getCodeByIdx(funcIdx).getCode();
+    }
 
     public List<Code> getCodesEntries() {
         return codesEntries.getElements();

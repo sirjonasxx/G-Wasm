@@ -3,6 +3,7 @@ package wasm.disassembly.modules.sections.type;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.indices.TypeIdx;
 import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.types.FuncType;
@@ -32,6 +33,10 @@ public class TypeSection extends Section {
     @Override
     protected void assemble2(OutputStream out) throws IOException, InvalidOpCodeException {
         functionTypes.assemble(out);
+    }
+
+    public FuncType getByFuncIdx(FuncIdx funcIdx) {
+        return getByTypeIdx(module.getFunctionSection().getByIdx(funcIdx));
     }
 
     public List<FuncType> getFunctionTypes() {

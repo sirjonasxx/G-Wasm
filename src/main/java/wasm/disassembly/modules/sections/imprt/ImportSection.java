@@ -11,6 +11,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ImportSection extends Section {
@@ -73,6 +74,14 @@ public class ImportSection extends Section {
         imports.getElements().addAll(functions);
         totalFuncImports += functions.size();
         return newFuncIdxs;
+    }
+
+    public FuncIdx importFunction(Import function) throws InvalidOpCodeException {
+        return importFunctions(Collections.singletonList(function)).get(0);
+    }
+
+    public Import getByIdx(FuncIdx funcIdx) {
+        return imports.getElements().get((int)funcIdx.getX());
     }
 
     public int getTotalFuncImports() {
