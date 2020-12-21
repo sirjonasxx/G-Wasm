@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.custom;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.sections.custom.namesection.NameSection;
 import wasm.disassembly.values.WName;
 import wasm.disassembly.values.WUnsignedInt;
 
@@ -14,7 +15,9 @@ public class CustomSectionFactory {
         long size = WUnsignedInt.read(in, 32);
         String name = WName.read(in);
 
-        // select implementation
+        if (name.equals("name")) {
+            return new NameSection(in, module, size);
+        }
 
         return new UnImplementedCustomSection(in, module, size, name);
     }

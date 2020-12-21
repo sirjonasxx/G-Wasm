@@ -18,12 +18,12 @@ public class TableSection extends Section {
 
 
     public TableSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, TABLE_SECTION_ID);
+        super(in, module, TABLE_SECTION_ID);
         tables = new Vector<>(in, Table::new, module);
     }
 
-    public TableSection(List<Table> tables) {
-        super(TABLE_SECTION_ID);
+    public TableSection(Module module, List<Table> tables) {
+        super(module, TABLE_SECTION_ID);
         this.tables = new Vector<>(tables);
     }
 

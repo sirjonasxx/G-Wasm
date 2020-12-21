@@ -15,12 +15,12 @@ public class StartSection extends Section {
     private Start start;
 
     public StartSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, START_SECTION_ID);
+        super(in, module, START_SECTION_ID);
         start = new Start(in, module);
     }
 
-    public StartSection(Start start) {
-        super(START_SECTION_ID);
+    public StartSection(Module module, Start start) {
+        super(module, START_SECTION_ID);
         this.start = start;
     }
 

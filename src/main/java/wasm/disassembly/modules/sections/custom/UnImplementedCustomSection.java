@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections.custom;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.sections.custom.CustomSection;
 import wasm.disassembly.values.WName;
 
 import java.io.BufferedInputStream;

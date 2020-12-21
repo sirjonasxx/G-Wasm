@@ -18,12 +18,12 @@ public class DataSection extends Section {
     private Vector<Data> dataSegments;
 
     public DataSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, DATA_SECTION_ID);
+        super(in, module, DATA_SECTION_ID);
         dataSegments = new Vector<>(in, Data::new, module);
     }
 
-    public DataSection(List<Data> dataSegments) {
-        super(DATA_SECTION_ID);
+    public DataSection(Module module, List<Data> dataSegments) {
+        super(module, DATA_SECTION_ID);
         this.dataSegments = new Vector<>(dataSegments);
     }
 

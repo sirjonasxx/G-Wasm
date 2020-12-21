@@ -20,12 +20,12 @@ public class TypeSection extends Section {
 
 
     public TypeSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, TYPE_SECTION_ID);
+        super(in, module, TYPE_SECTION_ID);
         functionTypes = new Vector<>(in, FuncType::new, module);
     }
 
-    public TypeSection(List<FuncType> functionTypes) {
-        super(TYPE_SECTION_ID);
+    public TypeSection(Module module, List<FuncType> functionTypes) {
+        super(module, TYPE_SECTION_ID);
         this.functionTypes = new Vector<>(functionTypes);
     }
 

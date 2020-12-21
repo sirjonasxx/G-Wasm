@@ -18,12 +18,12 @@ public class CodeSection extends Section {
     private Vector<Code> codesEntries;
 
     public CodeSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, CODE_SECTION_ID);
+        super(in, module, CODE_SECTION_ID);
         codesEntries = new Vector<>(in, Code::new, module);
     }
 
-    public CodeSection(List<Code> codesEntries) {
-        super(CODE_SECTION_ID);
+    public CodeSection(Module module, List<Code> codesEntries) {
+        super(module, CODE_SECTION_ID);
         this.codesEntries = new Vector<>(codesEntries);
     }
 

@@ -16,7 +16,7 @@ public abstract class CustomSection extends Section {
     private String name;
 
     public CustomSection(Module module, long size, String name) throws IOException, InvalidOpCodeException {
-        super(CUSTOM_SECTION_ID, size);
+        super(module, CUSTOM_SECTION_ID, size);
         this.name = name;
     }
 

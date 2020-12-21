@@ -18,12 +18,12 @@ public class MemorySection extends Section {
 
 
     public MemorySection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, MEMORY_SECTION_ID);
+        super(in, module, MEMORY_SECTION_ID);
         memories = new Vector<>(in, Mem::new, module);
     }
 
-    public MemorySection(List<Mem> memories) {
-        super(MEMORY_SECTION_ID);
+    public MemorySection(Module module, List<Mem> memories) {
+        super(module, MEMORY_SECTION_ID);
         this.memories = new Vector<>(memories);
     }
 

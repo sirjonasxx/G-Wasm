@@ -17,12 +17,12 @@ public class ExportSection extends Section {
     private Vector<Export> exports;
 
     public ExportSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, EXPORT_SECTION_ID);
+        super(in, module, EXPORT_SECTION_ID);
         exports = new Vector<>(in, Export::new, module);
     }
 
-    public ExportSection(List<Export> exports) {
-        super(EXPORT_SECTION_ID);
+    public ExportSection(Module module, List<Export> exports) {
+        super(module, EXPORT_SECTION_ID);
         this.exports = new Vector<>(exports);
     }
 

@@ -24,7 +24,7 @@ public class ImportSection extends Section {
 
 
     public ImportSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, IMPORT_SECTION_ID);
+        super(in, module, IMPORT_SECTION_ID);
         this.module = module;
         imports = new Vector<>(in, Import::new, module);
 
@@ -36,8 +36,8 @@ public class ImportSection extends Section {
         }
     }
 
-    public ImportSection(List<Import> imports) {
-        super(IMPORT_SECTION_ID);
+    public ImportSection(Module module, List<Import> imports) {
+        super(module, IMPORT_SECTION_ID);
         this.imports = new Vector<>(imports);
     }
 

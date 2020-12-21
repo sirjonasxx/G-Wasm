@@ -17,12 +17,12 @@ public class ElementSection extends Section {
     private Vector<Elem> elementSegments;
 
     public ElementSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, ELEMENT_SECTION_ID);
+        super(in, module, ELEMENT_SECTION_ID);
         elementSegments = new Vector<>(in, Elem::new, module);
     }
 
-    public ElementSection(List<Elem> elementSegments) {
-        super(ELEMENT_SECTION_ID);
+    public ElementSection(Module module, List<Elem> elementSegments) {
+        super(module, ELEMENT_SECTION_ID);
         this.elementSegments = new Vector<>(elementSegments);
     }
 

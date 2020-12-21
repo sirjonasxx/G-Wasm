@@ -2,6 +2,7 @@ package wasm.disassembly.modules.sections;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
+import wasm.disassembly.modules.Module;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -13,19 +14,22 @@ public abstract class Section extends WASMOpCode {
 
     private int sectionId;
     private long size;
+    protected Module module;
 
-    public Section(BufferedInputStream in, int sectionId) throws IOException, InvalidOpCodeException {
+    public Section(BufferedInputStream in, Module module, int sectionId) throws IOException, InvalidOpCodeException {
+        this.module = module;
         this.sectionId = sectionId;
         size = WUnsignedInt.read(in, 32);
     }
 
-    public Section(int sectionId, long size) {
+    public Section(Module module, int sectionId, long size) {
+        this.module = module;
         this.sectionId = sectionId;
         this.size = size;
     }
 
-    public Section(int sectionId) {
-        this(sectionId, -1);
+    public Section(Module module, int sectionId) {
+        this(module, sectionId, -1);
     }
 
     @Override

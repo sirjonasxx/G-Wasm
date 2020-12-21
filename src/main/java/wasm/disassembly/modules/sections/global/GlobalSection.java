@@ -18,12 +18,12 @@ public class GlobalSection extends Section {
 
 
     public GlobalSection(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        super(in, GLOBAL_SECTION_ID);
+        super(in, module, GLOBAL_SECTION_ID);
         globals = new Vector<>(in, Global::new, module);
     }
 
-    public GlobalSection(List<Global> globals) {
-        super(GLOBAL_SECTION_ID);
+    public GlobalSection(Module module, List<Global> globals) {
+        super(module, GLOBAL_SECTION_ID);
         this.globals = new Vector<>(globals);
     }
 
