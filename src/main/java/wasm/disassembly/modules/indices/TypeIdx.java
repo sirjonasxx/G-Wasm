@@ -33,4 +33,9 @@ public class TypeIdx extends WASMOpCode {
     public void setX(long x) {
         this.x = x;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof TypeIdx && ((TypeIdx)obj).getX() == x);
+    }
 }
