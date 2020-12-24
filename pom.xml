@@ -57,14 +57,4 @@
         </resources>
     </build>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>G-Earth</groupId>
-            <artifactId>G-Earth</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-    </dependencies>
-
 </project>
