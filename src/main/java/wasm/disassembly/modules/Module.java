@@ -19,7 +19,9 @@ import wasm.disassembly.modules.sections.start.StartSection;
 import wasm.disassembly.modules.sections.table.TableSection;
 import wasm.disassembly.modules.sections.type.TypeSection;
 import wasm.disassembly.types.FuncType;
+import wasm.misc.CodeCompare;
 import wasm.misc.Function;
+import wasm.misc.StreamReplacement;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -44,37 +46,11 @@ public class Module extends WASMOpCode {
 
     private List<List<CustomSection>> customSectionsList;
 
-    // ACTION TAKEN TO MINIMIZE MEM USAGE:
-    // everything in the function section (3) will be (on-the-go) assembled into 1 byte array
-    // same for element section (9)
-    // same for code section (10)
-    // same for data section (11)
-
-    // APPROACH:
-    // (1) import section - add imports in front of import section. (remember funcidx)
-    // Every matched FuncIdx will go +len(newImports)
-    // In code, take action if needed, and cache the functions that need copying
-    // Add cached functions to the end, remember their FuncIdx
-    // Export section - add the 3 funcidx
+    public final List<StreamReplacement> streamReplacements;
 
 
-
-    // actiontaken = decides what to do with matches from "searchFunctions",
-    //      * if 0: calls function with same index in newImports
-    //      * if 1-Y: calls function with same index in newImports, clears the rest of the function,
-    //                    copies the function and exports the copy to name Y
-
-    public final List<Import> newImports;
-    public final List<Function> searchFunctions;
-    public final List<String> actionTaken;
-    public final List<FuncType> newImportsFuncTypes;
-
-
-    public Module(BufferedInputStream in, List<Import> newImports, List<FuncType> newImportsFuncTypes, List<Function> searchFunctions, List<String> actionTaken) throws IOException, InvalidOpCodeException {
-        this.newImports = newImports;
-        this.searchFunctions = searchFunctions;
-        this.actionTaken = actionTaken;
-        this.newImportsFuncTypes = newImportsFuncTypes;
+    public Module(BufferedInputStream in, List<StreamReplacement> streamReplacements) throws IOException, InvalidOpCodeException {
+        this.streamReplacements = streamReplacements;
 
         customSectionsList = new ArrayList<>();
 
@@ -104,12 +80,13 @@ public class Module extends WASMOpCode {
         disassembleCustomSections(in);
         dataSection = isNextSection(in, 11) ? new DataSection(in, this) : null;
         disassembleCustomSections(in);
+        exportSection.addShittyExports(this);
 
         in.close();
     }
 
-    public Module(String fileName, List<Import> newImports, List<FuncType> newImportsFuncTypes, List<Function> searchFunctions, List<String> actionTaken) throws IOException, InvalidOpCodeException {
-        this(new BufferedInputStream(new FileInputStream(new File(fileName))), newImports, newImportsFuncTypes, searchFunctions, actionTaken);
+    public Module(String fileName, List<StreamReplacement> streamReplacements) throws IOException, InvalidOpCodeException {
+        this(new BufferedInputStream(new FileInputStream(new File(fileName))), streamReplacements);
     }
 
     private void disassembleCustomSections(BufferedInputStream in) throws IOException, InvalidOpCodeException {

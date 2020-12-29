@@ -22,7 +22,7 @@ public class FuncIdx extends WASMOpCode {
 
     public FuncIdx(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
         x = WUnsignedInt.read(in, 32)
-                + module.newImports.size();
+                + module.streamReplacements.size();
 
 
 //        ref = CodeSection.currentI; // debugging purpose

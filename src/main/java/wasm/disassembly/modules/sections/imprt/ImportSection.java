@@ -6,6 +6,9 @@ import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.sections.Section;
+import wasm.disassembly.types.FuncType;
+import wasm.disassembly.types.ResultType;
+import wasm.misc.StreamReplacement;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -43,17 +46,25 @@ public class ImportSection extends Section {
             }
         }
 
-        for (int i = 0; i < module.newImports.size(); i++) {
-            module.newImports.get(i).getImportDescription().setImportValue(
-                    module.getTypeSection().getTypeIdxForFuncType(module.newImportsFuncTypes.get(i))
-            );
+        List<Import> newImports = new ArrayList<>();
+
+
+
+        for (StreamReplacement streamReplacement : module.streamReplacements) {
+            newImports.add(new Import("env", streamReplacement.getImportName(), new ImportDesc(
+                    module.getTypeSection().getTypeIdxForFuncType(new FuncType(
+                            streamReplacement.getFuncType().getParameterType(),
+                            streamReplacement.getReplacementType() == StreamReplacement.ReplacementType.HOOK ? new ResultType(Collections.emptyList()) :
+                                    streamReplacement.getFuncType().getResultType()
+                    ))
+            )));
         }
 
-        List<Import> f = imports.getElements().subList(0, first);
-        f.addAll(module.newImports);
+        List<Import> f = new ArrayList<>(imports.getElements().subList(0, first));
+        f.addAll(newImports);
         f.addAll(imports.getElements().subList(first, imports.getElements().size()));
         imports.setElements(f);
-        totalFuncImports += module.newImports.size();
+        totalFuncImports += newImports.size();
     }
 
     public ImportSection(Module module, List<Import> imports) {

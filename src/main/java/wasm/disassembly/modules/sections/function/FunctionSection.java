@@ -9,7 +9,9 @@ import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.modules.sections.code.Code;
 import wasm.disassembly.modules.sections.code.Func;
 import wasm.disassembly.values.WUnsignedInt;
+import wasm.misc.CodeCompare;
 import wasm.misc.Function;
+import wasm.misc.StreamReplacement;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,8 +39,8 @@ public class FunctionSection extends Section {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         List<TypeIdx> searchFunctions = new ArrayList<>();
-        for (int i = 0; i < module.searchFunctions.size(); i++) {
-            Function f = module.searchFunctions.get(i);
+        for (int i = 0; i < module.streamReplacements.size(); i++) {
+            StreamReplacement f = module.streamReplacements.get(i);
             searchFunctions.add(module.getTypeSection().getTypeIdxForFuncType(f.getFuncType()));
             matchesSearchFunctionsTypes.add(new HashSet<>());
         }
@@ -55,10 +57,10 @@ public class FunctionSection extends Section {
             typeIdx.assemble(buffer);
         }
 
-        for (int i = 0; i < module.searchFunctions.size(); i++) {
-            String actionTaken = module.actionTaken.get(i);
+        for (int i = 0; i < module.streamReplacements.size(); i++) {
+            StreamReplacement.ReplacementType actionTaken = module.streamReplacements.get(i).getReplacementType();
             // new function will be created
-            if (actionTaken.startsWith("1")) {
+            if (actionTaken == StreamReplacement.ReplacementType.HOOKCOPYEXPORT) {
                 searchFunctions.get(i).assemble(buffer);
                 length++;
             }
