@@ -39,7 +39,9 @@ public abstract class Section extends WASMOpCode {
         ByteArrayOutputStream fakeOutputStream = new ByteArrayOutputStream();
         assemble2(fakeOutputStream);
         byte[] asbytes = fakeOutputStream.toByteArray();
+        System.out.println("section + " + sectionId + ", size: " + asbytes.length);
         WUnsignedInt.write(asbytes.length, out, 32);
+        fakeOutputStream.close();
         out.write(asbytes);
     }
 

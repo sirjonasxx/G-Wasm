@@ -12,11 +12,14 @@ import wasm.disassembly.modules.sections.element.ElementSection;
 import wasm.disassembly.modules.sections.export.ExportSection;
 import wasm.disassembly.modules.sections.function.FunctionSection;
 import wasm.disassembly.modules.sections.global.GlobalSection;
+import wasm.disassembly.modules.sections.imprt.Import;
 import wasm.disassembly.modules.sections.imprt.ImportSection;
 import wasm.disassembly.modules.sections.memory.MemorySection;
 import wasm.disassembly.modules.sections.start.StartSection;
 import wasm.disassembly.modules.sections.table.TableSection;
 import wasm.disassembly.modules.sections.type.TypeSection;
+import wasm.disassembly.types.FuncType;
+import wasm.misc.Function;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -40,9 +43,39 @@ public class Module extends WASMOpCode {
     private DataSection dataSection;
 
     private List<List<CustomSection>> customSectionsList;
-    private List<FuncIdx> allFuncIdxs = new ArrayList<>();
 
-    public Module(BufferedInputStream in) throws IOException, InvalidOpCodeException {
+    // ACTION TAKEN TO MINIMIZE MEM USAGE:
+    // everything in the function section (3) will be (on-the-go) assembled into 1 byte array
+    // same for element section (9)
+    // same for code section (10)
+    // same for data section (11)
+
+    // APPROACH:
+    // (1) import section - add imports in front of import section. (remember funcidx)
+    // Every matched FuncIdx will go +len(newImports)
+    // In code, take action if needed, and cache the functions that need copying
+    // Add cached functions to the end, remember their FuncIdx
+    // Export section - add the 3 funcidx
+
+
+
+    // actiontaken = decides what to do with matches from "searchFunctions",
+    //      * if 0: calls function with same index in newImports
+    //      * if 1-Y: calls function with same index in newImports, clears the rest of the function,
+    //                    copies the function and exports the copy to name Y
+
+    public final List<Import> newImports;
+    public final List<Function> searchFunctions;
+    public final List<String> actionTaken;
+    public final List<FuncType> newImportsFuncTypes;
+
+
+    public Module(BufferedInputStream in, List<Import> newImports, List<FuncType> newImportsFuncTypes, List<Function> searchFunctions, List<String> actionTaken) throws IOException, InvalidOpCodeException {
+        this.newImports = newImports;
+        this.searchFunctions = searchFunctions;
+        this.actionTaken = actionTaken;
+        this.newImportsFuncTypes = newImportsFuncTypes;
+
         customSectionsList = new ArrayList<>();
 
         magic = new Magic(in);
@@ -75,33 +108,8 @@ public class Module extends WASMOpCode {
         in.close();
     }
 
-    public Module(String fileName) throws IOException, InvalidOpCodeException {
-        this(new BufferedInputStream(new FileInputStream(new File(fileName))));
-    }
-
-    public Module(Magic magic, Version version, TypeSection typeSection, ImportSection importSection, FunctionSection functionSection, TableSection tableSection, MemorySection memorySection, GlobalSection globalSection, ExportSection exportSection, StartSection startSection, ElementSection elementSection, CodeSection codeSection, DataSection dataSection) {
-        this.magic = magic;
-        this.version = version;
-        this.typeSection = typeSection;
-        this.importSection = importSection;
-        this.functionSection = functionSection;
-        this.tableSection = tableSection;
-        this.memorySection = memorySection;
-        this.globalSection = globalSection;
-        this.exportSection = exportSection;
-        this.startSection = startSection;
-        this.elementSection = elementSection;
-        this.codeSection = codeSection;
-        this.dataSection = dataSection;
-
-        this.customSectionsList = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            customSectionsList.add(new ArrayList<>());
-        }
-    }
-    public Module(TypeSection typeSection, ImportSection importSection, FunctionSection functionSection, TableSection tableSection, MemorySection memorySection, GlobalSection globalSection, ExportSection exportSection, StartSection startSection, ElementSection elementSection, CodeSection codeSection, DataSection dataSection, List<List<CustomSection>> customSectionsList) {
-        this(new Magic(), new Version(), typeSection, importSection, functionSection, tableSection, memorySection,
-                globalSection, exportSection, startSection, elementSection, codeSection, dataSection);
+    public Module(String fileName, List<Import> newImports, List<FuncType> newImportsFuncTypes, List<Function> searchFunctions, List<String> actionTaken) throws IOException, InvalidOpCodeException {
+        this(new BufferedInputStream(new FileInputStream(new File(fileName))), newImports, newImportsFuncTypes, searchFunctions, actionTaken);
     }
 
     private void disassembleCustomSections(BufferedInputStream in) throws IOException, InvalidOpCodeException {
@@ -140,6 +148,7 @@ public class Module extends WASMOpCode {
             }
         }
         assembleCustomSections(out, 11);
+        out.close();
     }
 
     private void assembleCustomSections(OutputStream out, int location) throws IOException, InvalidOpCodeException {
@@ -149,9 +158,7 @@ public class Module extends WASMOpCode {
     }
 
     public void assembleToFile(String fileName) throws IOException, InvalidOpCodeException {
-        FileOutputStream habAssembled = new FileOutputStream(fileName);
-        assemble(habAssembled);
-        habAssembled.close();
+        assemble(new FileOutputStream(fileName));
     }
 
     public Magic getMagic() {
@@ -264,9 +271,5 @@ public class Module extends WASMOpCode {
 
     public void setCustomSectionsList(List<List<CustomSection>> customSectionsList) {
         this.customSectionsList = customSectionsList;
-    }
-
-    public List<FuncIdx> getAllFuncIdxs() {
-        return allFuncIdxs;
     }
 }

@@ -4,6 +4,7 @@ import com.sun.org.apache.xpath.internal.functions.FuncId;
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
 import wasm.disassembly.modules.Module;
+import wasm.disassembly.modules.sections.code.CodeSection;
 import wasm.disassembly.values.WUnsignedInt;
 
 import java.io.BufferedInputStream;
@@ -16,14 +17,19 @@ public class FuncIdx extends WASMOpCode {
 
     private long x;
 
+
+//    public int ref; // debugging purpose
+
     public FuncIdx(BufferedInputStream in, Module module) throws IOException, InvalidOpCodeException {
-        x = WUnsignedInt.read(in, 32);
-        module.getAllFuncIdxs().add(this);
+        x = WUnsignedInt.read(in, 32)
+                + module.newImports.size();
+
+
+//        ref = CodeSection.currentI; // debugging purpose
     }
 
     public FuncIdx(long x, Module module) {
         this.x = x;
-        module.getAllFuncIdxs().add(this);
     }
 
     @Override
@@ -37,5 +43,10 @@ public class FuncIdx extends WASMOpCode {
 
     public void setX(long x) {
         this.x = x;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof FuncIdx && ((FuncIdx)obj).getX() == x);
     }
 }

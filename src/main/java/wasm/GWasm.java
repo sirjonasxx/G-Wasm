@@ -11,6 +11,7 @@ import wasm.disassembly.modules.sections.imprt.ImportDesc;
 import wasm.disassembly.types.FuncType;
 import wasm.disassembly.types.ResultType;
 import wasm.disassembly.types.ValType;
+import wasm.misc.Function;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,40 +22,41 @@ import java.util.stream.Collectors;
 public class GWasm {
 
     public static void extractMethods(Module module) {
-        List<TypeIdx> typesFromImports = new ArrayList<>();
-        for (Import imp : module.getImportSection().getImports()) {
-            if (imp.getImportDescription().getImportType() == 0) {
-                typesFromImports.add((TypeIdx)imp.getImportDescription().getImportValue());
-            }
-        }
-
-        List<Export> exportList = module.getExportSection().getExports();
-        for(Export export : exportList) {
-            ExportDesc desc = export.getExportDesc();
-            if (desc.getExportType() == 0) {
-                FuncIdx funcIdx = (FuncIdx) desc.getExportValue();
-                TypeIdx typeIdx;
-                if (funcIdx.getX() < typesFromImports.size()) {
-                    typeIdx = typesFromImports.get((int)(funcIdx.getX()));
-                }
-                else {
-                    typeIdx = module.getFunctionSection().getTypeIdxVector().get((int)(funcIdx.getX()) - typesFromImports.size());
-                }
-                FuncType funcType = module.getTypeSection().getFunctionTypes().get((int)(typeIdx.getX()));
-
-                System.out.println(String.format("%s ::= %s -> %s",
-                        export.getName(),
-                        "(" + funcType.getParameterType().typeList().stream().map(Enum::name).collect(Collectors.joining(" ")) + ")",
-                        "(" + funcType.getResultType().typeList().stream().map(Enum::name).collect(Collectors.joining(" ")) + ")"
-                ));
-            }
-        }
+//        List<TypeIdx> typesFromImports = new ArrayList<>();
+//        for (Import imp : module.getImportSection().getImports()) {
+//            if (imp.getImportDescription().getImportType() == 0) {
+//                typesFromImports.add((TypeIdx)imp.getImportDescription().getImportValue());
+//            }
+//        }
+//
+//        List<Export> exportList = module.getExportSection().getExports();
+//        for(Export export : exportList) {
+//            ExportDesc desc = export.getExportDesc();
+//            if (desc.getExportType() == 0) {
+//                FuncIdx funcIdx = (FuncIdx) desc.getExportValue();
+//                TypeIdx typeIdx;
+//                if (funcIdx.getX() < typesFromImports.size()) {
+//                    typeIdx = typesFromImports.get((int)(funcIdx.getX()));
+//                }
+//                else {
+//                    typeIdx = module.getFunctionSection().getTypeIdxVector().get((int)(funcIdx.getX()) - typesFromImports.size());
+//                }
+//                FuncType funcType = module.getTypeSection().getFunctionTypes().get((int)(typeIdx.getX()));
+//
+//                System.out.println(String.format("%s ::= %s -> %s",
+//                        export.getName(),
+//                        "(" + funcType.getParameterType().typeList().stream().map(Enum::name).collect(Collectors.joining(" ")) + ")",
+//                        "(" + funcType.getResultType().typeList().stream().map(Enum::name).collect(Collectors.joining(" ")) + ")"
+//                ));
+//            }
+//        }
     }
 
     public static void main(String[] args) throws IOException, InvalidOpCodeException {
 
         long start = System.currentTimeMillis();
-        Module module = new Module("C:\\Users\\jonas\\Desktop\\Projects\\Jznnp\\S\\habbo2020\\rawfiles\\0.6.0_(7)\\habbo2020-global-prod.wasm.code.unityweb");
+        Module module = new Module("C:\\Users\\jonas\\Desktop\\Projects\\Jznnp\\S\\habbo2020\\rawfiles\\0.6.0_(7)\\habbo2020-global-prod.wasm.code.unityweb",
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         long end = System.currentTimeMillis();
 
         System.out.println("Assembly time: " + (end - start));

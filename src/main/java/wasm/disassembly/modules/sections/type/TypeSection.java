@@ -35,9 +35,9 @@ public class TypeSection extends Section {
         functionTypes.assemble(out);
     }
 
-    public FuncType getByFuncIdx(FuncIdx funcIdx) {
-        return getByTypeIdx(module.getFunctionSection().getByIdx(funcIdx));
-    }
+//    public FuncType getByFuncIdx(FuncIdx funcIdx) {
+//        return getByTypeIdx(module.getFunctionSection().getByIdx(funcIdx));
+//    }
 
     public List<FuncType> getFunctionTypes() {
         return functionTypes.getElements();

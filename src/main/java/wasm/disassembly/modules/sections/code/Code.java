@@ -30,6 +30,7 @@ public class Code extends WASMOpCode {
         byte[] codeInBytes = codeBuffer.toByteArray();
         WUnsignedInt.write(codeInBytes.length, out, 32);
         out.write(codeInBytes);
+        codeBuffer.close();
     }
 
     public Func getCode() {

@@ -21,7 +21,7 @@ public class ExportDesc extends WASMOpCode {
     public ExportDesc(BufferedInputStream in, Module module) throws InvalidOpCodeException, IOException {
         exportType = in.read();
         if (exportType < 0x00 || exportType > 0x03) {
-            throw new InvalidOpCodeException("invalid importdesc type");
+            throw new InvalidOpCodeException("invalid exportdesc type");
         }
 
         exportValue = exportType == 0x00 ? new FuncIdx(in, module) :

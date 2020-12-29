@@ -26,25 +26,25 @@ public class Function {
         this.code = code;
     }
 
-    public Function(Module module, FuncIdx funcIdx) {
-        funcType = module.getTypeSection().getByFuncIdx(funcIdx);
+//    public Function(Module module, FuncIdx funcIdx) {
+//        funcType = module.getTypeSection().getByFuncIdx(funcIdx);
+//
+//        Func code = module.getCodeSection().getByIdx(funcIdx);
+//        this.code = code.getExpression();
+//        locals = code.getLocalss();
+//    }
 
-        Func code = module.getCodeSection().getByIdx(funcIdx);
-        this.code = code.getExpression();
-        locals = code.getLocalss();
-    }
-
-    public FuncIdx addToModule(Module module) {
-        TypeIdx typeIdx = module.getTypeSection().getTypeIdxForFuncType(funcType);
-        Func func = new Func(locals, code);
-
-        module.getFunctionSection().getTypeIdxVector().add(typeIdx);
-        module.getCodeSection().getCodesEntries().add(new Code(func));
-        return new FuncIdx(
-                module.getImportSection().getTotalFuncImports() + module.getCodeSection().getCodesEntries().size() - 1,
-                module
-        );
-    }
+//    public FuncIdx addToModule(Module module) {
+//        TypeIdx typeIdx = module.getTypeSection().getTypeIdxForFuncType(funcType);
+//        Func func = new Func(locals, code);
+//
+//        module.getFunctionSection().getTypeIdxVector().add(typeIdx);
+//        module.getCodeSection().getCodesEntries().add(new Code(func));
+//        return new FuncIdx(
+//                module.getImportSection().getTotalFuncImports() + module.getCodeSection().getCodesEntries().size() - 1,
+//                module
+//        );
+//    }
 
 
     public FuncType getFuncType() {
