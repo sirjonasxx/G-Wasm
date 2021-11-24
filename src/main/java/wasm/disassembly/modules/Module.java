@@ -2,7 +2,6 @@ package wasm.disassembly.modules;
 
 import wasm.disassembly.InvalidOpCodeException;
 import wasm.disassembly.WASMOpCode;
-import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.sections.Section;
 import wasm.disassembly.modules.sections.code.CodeSection;
 import wasm.disassembly.modules.sections.custom.CustomSection;
@@ -12,15 +11,11 @@ import wasm.disassembly.modules.sections.element.ElementSection;
 import wasm.disassembly.modules.sections.export.ExportSection;
 import wasm.disassembly.modules.sections.function.FunctionSection;
 import wasm.disassembly.modules.sections.global.GlobalSection;
-import wasm.disassembly.modules.sections.imprt.Import;
 import wasm.disassembly.modules.sections.imprt.ImportSection;
 import wasm.disassembly.modules.sections.memory.MemorySection;
 import wasm.disassembly.modules.sections.start.StartSection;
 import wasm.disassembly.modules.sections.table.TableSection;
 import wasm.disassembly.modules.sections.type.TypeSection;
-import wasm.disassembly.types.FuncType;
-import wasm.misc.CodeCompare;
-import wasm.misc.Function;
 import wasm.misc.StreamReplacement;
 
 import java.io.*;

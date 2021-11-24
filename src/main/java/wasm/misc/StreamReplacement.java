@@ -1,5 +1,6 @@
 package wasm.misc;
 
+import wasm.disassembly.modules.sections.code.Func;
 import wasm.disassembly.types.FuncType;
 
 public interface StreamReplacement {
@@ -14,5 +15,5 @@ public interface StreamReplacement {
     ReplacementType getReplacementType();
     String getImportName();
     String getExportName();
-    CodeCompare getCodeCompare();
+    boolean codeMatches(Func code);
 }

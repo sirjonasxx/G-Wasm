@@ -1,8 +1,6 @@
 package wasm.disassembly.modules.sections.code;
 
 import wasm.disassembly.InvalidOpCodeException;
-import wasm.disassembly.conventions.Creator;
-import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.instructions.Expression;
 import wasm.disassembly.instructions.Instr;
 import wasm.disassembly.instructions.InstrType;
@@ -12,10 +10,7 @@ import wasm.disassembly.modules.Module;
 import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.indices.LocalIdx;
 import wasm.disassembly.modules.sections.Section;
-import wasm.disassembly.modules.sections.data.Data;
 import wasm.disassembly.values.WUnsignedInt;
-import wasm.misc.CodeCompare;
-import wasm.misc.Function;
 import wasm.misc.StreamReplacement;
 
 import java.io.BufferedInputStream;
@@ -52,9 +47,8 @@ public class CodeSection extends Section {
             for (int j = 0; j < module.streamReplacements.size(); j++) {
 
                 if (module.getFunctionSection().matchesSearchFunctionsTypes.get(j).contains(i)) {
-                    CodeCompare comparer = module.streamReplacements.get(j).getCodeCompare();
 
-                    if (comparer.isEqual(func)) {
+                    if (module.streamReplacements.get(j).codeMatches(func)) {
                         StreamReplacement.ReplacementType actionTaken = module.streamReplacements.get(j).getReplacementType();
                         if (actionTaken == StreamReplacement.ReplacementType.HOOK) {
                             CallInstr call = new CallInstr(new FuncIdx(j, module));

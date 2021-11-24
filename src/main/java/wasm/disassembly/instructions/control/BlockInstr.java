@@ -22,7 +22,7 @@ public class BlockInstr extends Instr {
 
         blockType = new BlockType(in, module);
 
-        blockInstructions = new ArrayList<>();
+        blockInstructions = new ArrayList<>(4);
         InstrType type;
         while ((type = InstrFactory.disassembleType(in)) != InstrType.END) {
             blockInstructions.add(InstrFactory.disassemble(in, type, module));

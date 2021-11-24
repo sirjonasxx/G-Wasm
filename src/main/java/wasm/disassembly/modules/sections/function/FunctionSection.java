@@ -1,16 +1,10 @@
 package wasm.disassembly.modules.sections.function;
 
 import wasm.disassembly.InvalidOpCodeException;
-import wasm.disassembly.conventions.Vector;
 import wasm.disassembly.modules.Module;
-import wasm.disassembly.modules.indices.FuncIdx;
 import wasm.disassembly.modules.indices.TypeIdx;
 import wasm.disassembly.modules.sections.Section;
-import wasm.disassembly.modules.sections.code.Code;
-import wasm.disassembly.modules.sections.code.Func;
 import wasm.disassembly.values.WUnsignedInt;
-import wasm.misc.CodeCompare;
-import wasm.misc.Function;
 import wasm.misc.StreamReplacement;
 
 import java.io.BufferedInputStream;

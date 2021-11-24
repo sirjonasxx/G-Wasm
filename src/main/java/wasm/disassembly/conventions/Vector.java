@@ -17,7 +17,7 @@ public class Vector<B extends WASMOpCode> extends WASMOpCode {
 
     public Vector(BufferedInputStream in, Creator<B> creator, Module module) throws IOException, InvalidOpCodeException {
         long length = WUnsignedInt.read(in, 32);
-        elements = new ArrayList<>();
+        elements = new ArrayList<>(1);
         for (int i = 0; i < length; i++) {
             elements.add(creator.create(in, module));
         }

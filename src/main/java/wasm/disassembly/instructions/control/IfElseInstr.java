@@ -24,14 +24,14 @@ public class IfElseInstr extends Instr {
         super(instrType);
 
         blockType = new BlockType(in, module);
-        ifInstructions = new ArrayList<>();
+        ifInstructions = new ArrayList<>(2);
         elseInstructions = null;
         List<Instr> currentBlock = ifInstructions;
 
         InstrType type;
         while ((type = InstrFactory.disassembleType(in)) != InstrType.END) {
             if (type == InstrType.ELSE) {
-                elseInstructions = new ArrayList<>();
+                elseInstructions = new ArrayList<>(2);
                 currentBlock = elseInstructions;
             }
             else {
