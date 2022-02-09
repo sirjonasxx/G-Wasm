@@ -21,6 +21,8 @@ import wasm.disassembly.modules.sections.type.TypeSection;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Module extends WASMOpCode {
 
@@ -75,8 +77,12 @@ public class Module extends WASMOpCode {
         in.close();
     }
 
-    public Module(String fileName) throws IOException, InvalidOpCodeException {
-        this(new BufferedInputStream(new FileInputStream(new File(fileName))));
+    public Module(String fileName, boolean gzip) throws IOException, InvalidOpCodeException {
+        this(new BufferedInputStream(
+                gzip ?
+                        new GZIPInputStream(new FileInputStream(new File(fileName))) :
+                        new FileInputStream(new File(fileName))
+        ));
     }
 
     public Module(Magic magic, Version version, TypeSection typeSection, ImportSection importSection, FunctionSection functionSection, TableSection tableSection, MemorySection memorySection, GlobalSection globalSection, ExportSection exportSection, StartSection startSection, ElementSection elementSection, CodeSection codeSection, DataSection dataSection) {
@@ -148,8 +154,8 @@ public class Module extends WASMOpCode {
         }
     }
 
-    public void assembleToFile(String fileName) throws IOException, InvalidOpCodeException {
-        FileOutputStream habAssembled = new FileOutputStream(fileName);
+    public void assembleToFile(String fileName, boolean gzip) throws IOException, InvalidOpCodeException {
+        OutputStream habAssembled = gzip ? new GZIPOutputStream(new FileOutputStream(fileName)) : new FileOutputStream(fileName);
         assemble(habAssembled);
         habAssembled.close();
     }
