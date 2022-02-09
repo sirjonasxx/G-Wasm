@@ -1,16 +1,10 @@
 package wasm.misc;
 
 import wasm.disassembly.instructions.Expression;
-import wasm.disassembly.modules.Module;
-import wasm.disassembly.modules.indices.FuncIdx;
-import wasm.disassembly.modules.indices.TypeIdx;
-import wasm.disassembly.modules.sections.code.Code;
-import wasm.disassembly.modules.sections.code.Func;
 import wasm.disassembly.modules.sections.code.Locals;
 import wasm.disassembly.types.FuncType;
 import wasm.disassembly.types.ValType;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
