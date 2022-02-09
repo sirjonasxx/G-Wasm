@@ -21,6 +21,8 @@ import wasm.misc.StreamReplacement;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Module extends WASMOpCode {
 
@@ -80,8 +82,12 @@ public class Module extends WASMOpCode {
         in.close();
     }
 
-    public Module(String fileName, List<StreamReplacement> streamReplacements) throws IOException, InvalidOpCodeException {
-        this(new BufferedInputStream(new FileInputStream(new File(fileName))), streamReplacements);
+    public Module(String fileName, boolean gzip, List<StreamReplacement> streamReplacements) throws IOException, InvalidOpCodeException {
+        this(new BufferedInputStream(gzip ?
+                        new GZIPInputStream(new FileInputStream(new File(fileName))) :
+                        new FileInputStream(new File(fileName)))
+                , streamReplacements
+        );
     }
 
     private void disassembleCustomSections(BufferedInputStream in) throws IOException, InvalidOpCodeException {
@@ -129,8 +135,8 @@ public class Module extends WASMOpCode {
         }
     }
 
-    public void assembleToFile(String fileName) throws IOException, InvalidOpCodeException {
-        assemble(new FileOutputStream(fileName));
+    public void assembleToFile(String fileName, boolean gzip) throws IOException, InvalidOpCodeException {
+        assemble(gzip ? new GZIPOutputStream(new FileOutputStream(fileName)) : new FileOutputStream(fileName));
     }
 
     public Magic getMagic() {
